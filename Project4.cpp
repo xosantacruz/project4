@@ -41,14 +41,14 @@ void printGoals(){
 }
 
 void printActivityLevels(){
-	cout << "\n1.) Not very active";
-	cout << "Spend most of the day sitting down(example: student, receptionist, programmer)" <<endl;
-	cout << "2.) Lightly active";
-	cout << "Spend majority of your day standing (example: teacher, salesman, optometrist)" << endl;
-	cout << "3.) Active";
-	cout << "Spend most of your day walking (example: UPS,)" << endl;
-	cout << "4.) Very Active";
-	cout << "Spend most of your day doing physical work (example: labor, bike messenger)" <<endl;
+	cout << "\n1.) Not very active. ";
+	cout << "(Example: student, receptionist, programmer)";
+	cout << "\n2.) Lightly active. ";
+	cout << "(Example: teacher, salesman, optometrist)";
+	cout << "\n3.) Active. ";
+	cout << "(Example: UPS,)" << endl; // add to list...fix
+	cout << "\n4.) Very Active. ";
+	cout << "(Example: labor, bike messenger)";
 }
 
 void printErrorMsg() {
@@ -59,14 +59,14 @@ void printErrorMsg() {
 
 int main (){
 	// Declarations 
-	int userChar = 0;
+	string userChar;
 	int userAge = -1;
 	int userWeight = -1;
 	int userHeight = -1;
 	int weightGoal = 0;
 	int calorieCount = 0;
 	string userGoal;
-	int activityLevel = 0;
+	string activityLevel;
 
 	//user inputs
 
@@ -87,26 +87,44 @@ int main (){
 		
 	}
 
-	while (activityLevel < 1 || activityLevel > 4){ 
+	while (activityLevel.length() != 1){ 
 		cout << "\nWhat is your activity level outside of your fitness life? ";
 		printActivityLevels();
 		cin >> activityLevel;
 
-		if (activityLevel < 1 || activityLevel > 4){
+		if (activityLevel.length() > 1){
 			printErrorMsg();
+			continue;
+		}
+		int i = atoi(activityLevel.c_str());
+		if (i == 1 || i == 2 || i == 3 || i ==4){
+			break;
 		}
 	}
 
-	while (userChar != 'F' || userChar != 'M') {
+	while (userChar.length() != 1) {
 		FlushInstream();
 		cout << "\nEnter your gender: (F/M)";
-		userChar = getchar();
+		cin >> userChar;
 
-		if (tolower(userChar) == 'f' || tolower(userChar) == 'm' ) {
-			break;
+		if(userChar.length() >1){
+			printErrorMsg();
+			continue;
+		}
+
+		if (isdigit(userChar.at(0)) == true) {
+			userChar.clear();
+			printErrorMsg();
+			continue;
 	 	}
 
-	 	printErrorMsg();
+	 	if(tolower(userChar.at(0)) == 'f' || tolower(userChar.at(0)) == 'm'){
+	 		break;
+	 	}
+		else{
+	 		userChar.clear();
+	 		printErrorMsg();
+	 	}
 	 }
 
 	while (userAge < 0 || userAge > 110){
@@ -136,12 +154,12 @@ int main (){
 	}	
 
 
-	if (userChar == 'F')
-	{
-		calorieCount = getFemaleCalorieCount(userAge, userWeight, userHeight);
-	} else {
-		calorieCount = getMaleCalorieCount(userAge, userWeight, userHeight);
-	}
+	// if (userChar == 'F')
+	// {
+	// 	calorieCount = getFemaleCalorieCount(userAge, userWeight, userHeight);
+	// } else {
+	// 	calorieCount = getMaleCalorieCount(userAge, userWeight, userHeight);
+	// }
 
 	cout << "You should eat " << calorieCount << " calories each day to reach your goal." << endl;
 	
