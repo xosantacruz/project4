@@ -2,6 +2,7 @@
 #include <cmath>
 #include <string>
 #include <ctype.h>
+#include<stdlib.h>
 using namespace std;
 
 // code was copied from stackoverflow to help with the input stream
@@ -17,6 +18,7 @@ void FlushInstream(istream &inStream = cin) {
     }
 }
 
+//functions 
 int getMaleCalorieCount(int userAge, int userWeight, int userHeight){
 	// TO DO: Use userAge, Weight, and Height to calculate # of calories
 	int maleCalorieIntake =0;
@@ -63,19 +65,26 @@ int main (){
 	int userHeight = -1;
 	int weightGoal = 0;
 	int calorieCount = 0;
-	int userGoal = 0;
+	string userGoal;
 	int activityLevel = 0;
 
 	//user inputs
 
-	while(userGoal < 1 || userGoal > 3) {
+	while(userGoal.length() != 1){
 		cout << "What is your goal? ";
 		printGoals();
 		cin >> userGoal;
 
-		if (userGoal < 1 || userGoal > 3) {
+		if(userGoal.length() > 1){
 			printErrorMsg();
+			continue;
 		}
+
+		int i = atoi(userGoal.c_str());
+		if (i == 1 || i == 2 || i == 3) {
+			break;
+		}
+		
 	}
 
 	while (activityLevel < 1 || activityLevel > 4){ 
