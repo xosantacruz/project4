@@ -127,11 +127,13 @@ int main (){
 	 	}
 	 }
 
-	while (userAge < 0 || userAge > 110){
+	while (userAge.length() < 0 || userAge.length() > 110){
+		FlushInstream();
 		cout << "\nEnter your age: ";
 		cin >> userAge;
 
-		if (userAge < 0 || userAge > 110){
+		if (userAge.length() < 0 || userAge.length() > 110){
+			
 			printErrorMsg();
 		}
 	}
