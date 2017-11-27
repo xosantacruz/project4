@@ -73,7 +73,7 @@ int main (){
 
 	cout << "Enter name: ";
 	cin >> userName;
-	
+
 	// Open data.txt
 	myDataFile = fopen("data.txt", "r");
 
@@ -96,6 +96,7 @@ int main (){
 		{
 			cout << "We found your name in our file." << endl;
 			userFound = true;
+			break;
 		}
 	}
 
@@ -105,27 +106,55 @@ int main (){
 		return 0;
 	}
 	
-	printUserOptions();
+	//get user choice
+	while(userChoice.length() != 1){
+		printUserOptions();
+		cin >> userChoice;
 
-	
+		if(userChoice.length() > 1){
+			printErrorMsg();
+			continue;
+		}
 
+		int i = atoi(userChoice.c_str());
+		if (i == 1 || i == 2 || i == 3) {
+			break;
+		}
+		else{
+			printErrorMsg();
+			userChoice.clear();
+		}	
+	}
 
-	//while(userGoal.length() != 1){
-	//	cout << userName << ", what would you like to do?";
-	//	printWelcomeMenu();
-	//	cin >> userChoice;
+	//display user information
+	if (userChoice.at(0) == '1')
+	{ 
+		for (int i = 0, j = 0; i < strlen(userInfo); ++i)
+		{
+			cout << "Name: " << userInfo[i];
 
-	//	if(userGoal.length() > 1){
-	//		printErrorMsg();
-	//		continue;
-	//	}
+			if (userInfo[i] == ',')
+			{
+				if (j == 1)
+				{
+					cout << "Weight: ";
+				}
+				else if(j == 2){
+					cout << "Height: ";
+				}
+				else if(j ==3){
+					cout << "Age: ";
+				}
+				else{
+					cout << "Gender: ";
+				}
+			
 
-	//	int i = atoi(userChoice.c_str());
-	//	if (i == 1 || i == 2 || i == 3) {
-	//		break;
-	//	}
+				cout << endl;
+			}
+		}
 		
-	//}
+	}
 
 	
 
