@@ -34,10 +34,10 @@ int getFemaleCalorieCount(int userAge, int userWeight, int userHeight){
 	return womenCalorieIntake;
 }
 
-void printGoals(){
-	cout << "\n1.) Lose weight." << endl;
-	cout << "2.) Maintain weight." << endl;
-	cout << "3.) Gain muscle." << endl;
+void printUserOptions(){
+	cout << "\n1.) View my information." << endl;
+	cout << "2.) Update my information." << endl;
+	cout << "3.) Calculate my calories" << endl;
 }
 
 void printActivityLevels(){
@@ -63,98 +63,74 @@ int main (){
 	int userAge = -1;
 	int userWeight = -1;
 	int userHeight = -1;
-	int weightGoal = 0;
+	string userName;
 	int calorieCount = 0;
-	string userGoal;
+	string userChoice;
 	string activityLevel;
+	FILE * myDataFile;
+	char userInfo[256]; 
+	bool userFound = false;
 
-	//user inputs
+	cout << "Enter name: ";
+	cin >> userName;
+	
+	// Open data.txt
+	myDataFile = fopen("data.txt", "r");
 
-	while(userGoal.length() != 1){
-		cout << "What is your goal? ";
-		printGoals();
-		cin >> userGoal;
+	if(myDataFile == NULL){
+		cout << "Could not find data.txt" << endl;
+		return 0;
+	}
 
-		if(userGoal.length() > 1){
-			printErrorMsg();
-			continue;
+	while(feof(myDataFile) == false){
+		fgets(userInfo, 256, myDataFile);
+
+		string temp;
+		temp.reserve(30);
+		for (int i = 0; userInfo[i] != ','; ++i)
+		{
+			temp.push_back(userInfo[i]);
 		}
 
-		int i = atoi(userGoal.c_str());
-		if (i == 1 || i == 2 || i == 3) {
-			break;
+		if (temp == userName)
+		{
+			cout << "We found your name in our file." << endl;
+			userFound = true;
 		}
+	}
+
+	if (userFound == false)
+	{
+		cout << "I'm sorry, your name was not found." << endl;
+		return 0;
+	}
+	
+	printUserOptions();
+
+	
+
+
+	//while(userGoal.length() != 1){
+	//	cout << userName << ", what would you like to do?";
+	//	printWelcomeMenu();
+	//	cin >> userChoice;
+
+	//	if(userGoal.length() > 1){
+	//		printErrorMsg();
+	//		continue;
+	//	}
+
+	//	int i = atoi(userChoice.c_str());
+	//	if (i == 1 || i == 2 || i == 3) {
+	//		break;
+	//	}
 		
-	}
+	//}
 
-	while (activityLevel.length() != 1){ 
-		cout << "\nWhat is your activity level outside of your fitness life? ";
-		printActivityLevels();
-		cin >> activityLevel;
+	
 
-		if (activityLevel.length() > 1){
-			printErrorMsg();
-			continue;
-		}
-		int i = atoi(activityLevel.c_str());
-		if (i == 1 || i == 2 || i == 3 || i ==4){
-			break;
-		}
-	}
-
-	while (userChar.length() != 1) {
-		FlushInstream();
-		cout << "\nEnter your gender: (F/M)";
-		cin >> userChar;
-
-		if(userChar.length() >1){
-			printErrorMsg();
-			continue;
-		}
-
-		if (isdigit(userChar.at(0)) == true) {
-			userChar.clear();
-			printErrorMsg();
-			continue;
-	 	}
-
-	 	if(tolower(userChar.at(0)) == 'f' || tolower(userChar.at(0)) == 'm'){
-	 		break;
-	 	}
-		else{
-	 		userChar.clear();
-	 		printErrorMsg();
-	 	}
-	 }
-
-	while (userAge.length() < 0 || userAge.length() > 110){
-		FlushInstream();
-		cout << "\nEnter your age: ";
-		cin >> userAge;
-
-		if (userAge.length() < 0 || userAge.length() > 110){
-			
-			printErrorMsg();
-		}
-	}
-	while (userWeight < 0 || userWeight > 600){
-		cout << "\nEnter your weight(in lbs): ";
-		cin >> userWeight;
-
-		if(userWeight < 0 || userWeight > 600){
-			printErrorMsg();
-		}
-	}	
-
-	while (userHeight < 0 || userHeight >300){
-		cout << "\nEnter your height(in inches): ";
-		cin >> userHeight;
-
-		if( userHeight < 0 || userHeight > 300){
-			printErrorMsg();
-		}
-	}	
-
+	
+	
 
 	// if (userChar == 'F')
 	// {
@@ -163,7 +139,7 @@ int main (){
 	// 	calorieCount = getMaleCalorieCount(userAge, userWeight, userHeight);
 	// }
 
-	cout << "You should eat " << calorieCount << " calories each day to reach your goal." << endl;
+	//cout << "You should eat " << calorieCount << " calories each day to reach your goal." << endl;
 	
 
 	return 0;
