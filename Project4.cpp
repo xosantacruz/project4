@@ -399,12 +399,22 @@ int main() {
 	// If the user chooses option 3: "Calculate calorie count"
 	if (userChoice.at(0) == '3')
 	{
-
+		cout << "hi";
 	}
 
 	// If the user chooses option 3: "Calculate calories"
 	// Then we calculate the user's calories and display them.
 	// TO DO:
+	
+	// if (userGender == 'F')
+	// {
+	// 	calorieCount = getFemaleCalorieCount(userAge, userWeight, userHeight);
+	// } else {
+	// 	calorieCount = getMaleCalorieCount(userAge, userWeight, userHeight);
+	// }
+
+	cout << "You should eat " << calorieCount << " calories each day to reach your goal." << endl;
+
 	return 0;
 }
 
