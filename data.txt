@@ -1,0 +1,23 @@
+Carlos,162,66,30,M
+Betty, 138,60,27,F
+Rose,106,56,23,F
+Lucia,110,58,52,F
+Jose,200,67,26,M
+Luis,159,65,54,M
+Lupita,130,64,25,F
+Cindy,150,54,24,M
+David,160,78,29,M
+Juan,156,69,29,M
+Anthony,180,74,20,M
+Mimi,125,57,17,F
+Rosa,113,60,21,F
+Misa,138,71,16,M
+Elizabeth,145,53,28,F
+Oli,178,61,21,M
+Rick,167,67,35,M
+Ana,143,59,33,F
+Erwin,137,70,20,M
+Jackie,134,57,23,F
+Edsion,152,62,19,M
+Andrea,155,63,20,F
+Miguel,166,67,28,M
