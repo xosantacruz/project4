@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <iostream> 
 #include <cmath>
 #include <string>
@@ -36,8 +37,7 @@ void FlushInstream(istream &inStream = cin) {
 // Output:
 //		- Returns the calorie count for a male (int)
 // =========================================================================
-int getMaleCalorieCount(int userAge, int userWeight, int userHeight) {
-	// TO DO: Use userAge, Weight, and Height to calculate # of calories
+int getMaleCalorieCount(int userHeight, int userWeight, int userAge) {
 	int maleCalorieIntake = 0;
 	maleCalorieIntake = (userHeight * 6.25) + (userWeight * 9.99) - (userAge * 4.92) + 5;
 
@@ -57,7 +57,7 @@ int getMaleCalorieCount(int userAge, int userWeight, int userHeight) {
 // Output:
 //		- Returns the calorie count for a female (int)
 // =========================================================================
-int getFemaleCalorieCount(int userAge, int userWeight, int userHeight) {
+int getFemaleCalorieCount(int userHeight, int userWeight, int userAge) {
 	int womenCalorieIntake = 0;
 	womenCalorieIntake = (userHeight * 6.25) + (userWeight * 9.99) - (userAge * 4.92) - 161;
 
@@ -77,26 +77,6 @@ void printUserOptions() {
 	cout << "1.) View my information." << endl;
 	cout << "2.) Update my information." << endl;
 	cout << "3.) Calculate my calories" << endl;
-}
-
-
-// printActivityLevels =========================================================
-// This function prints out the activity level options that the user can choose
-// from when calculating their calorie count.
-//
-// Input: Nothing.
-//
-// Output: Nothing.
-// =============================================================================
-void printActivityLevels() {
-	cout << "\n1.) Not very active. ";
-	cout << "(Example: student, receptionist, programmer)";
-	cout << "\n2.) Lightly active. ";
-	cout << "(Example: teacher, salesman, optometrist)";
-	cout << "\n3.) Active. ";
-	cout << "(Example: UPS,)" << endl; // add to list...fix
-	cout << "\n4.) Very Active. ";
-	cout << "(Example: labor, bike messenger)";
 }
 
 // printErrorMsg ==============================================================
@@ -138,6 +118,13 @@ int main() {
 	// Prompt the user for their name.
 	cout << "Enter name: ";
 	cin >> userName;
+
+	// Convert name to uppercase and the rest to lowercase.
+	userName.at(0) = toupper(userName.at(0));
+	for (int i = 1; i < userName.length(); i++)
+	{
+		userName.at(i) = tolower(userName.at(i));
+	}
 
 	// Open "data.txt" for "r"eading using the fopen_s function, and then check
 	// the return value for a non-zero value. Non zero values mean that the file
@@ -370,16 +357,17 @@ int main() {
 			cout << "\n\nEnter gender: ";
 			cin >> userGender;
 
-			// Check it's not more than 1 character
-			if (userGender.length() > 1)
+			userGender.at(0) = toupper(userGender.at(0));
+			if (userGender.at(0) == 'F' || userGender.at(0) == 'M')
 			{
-				printErrorMsg();
-				userGender.clear();
+				// Append the user's gender.
+				updatedUserInfo.append(userGender);
 				continue;
 			}
-
-			// Append the user's gender.
-			updatedUserInfo.append(userGender);
+			else {
+				printErrorMsg();
+				userGender.clear();
+			}
 		}
 
 		// Open data.txt for "a"ppending
@@ -399,22 +387,89 @@ int main() {
 	// If the user chooses option 3: "Calculate calorie count"
 	if (userChoice.at(0) == '3')
 	{
-		cout << "hi";
+		// Open the data file
+		err = fopen_s(&myDataFile, "data.txt", "r");
+		if (err != 0)
+		{
+			cout << "Could not open data.txt for reading." << endl;
+			return 0;
+		}
+
+		// Loop until you reach EOF.
+		while (feof(myDataFile) == false) {
+			// Get a line of data, one line at a time.
+			fgets(userInfo, 256, myDataFile);
+
+			string temp;
+			temp.reserve(30);
+			for (int i = 0; userInfo[i] != ','; ++i)
+			{
+				temp.push_back(userInfo[i]);
+			}
+
+			// If temp is equal to the userName, break.
+			if (temp == userName)
+			{
+				break;
+			}
+		} // end of while loop
+
+		string name;
+		string weight;
+		string height;
+		string age;
+		string gender;
+
+		// Lengths of each category
+		name.reserve(20);
+		weight.reserve(3);
+		height.reserve(3);
+		age.reserve(3);
+		gender.reserve(1);
+
+		 // This loop will save each category into its own variable
+		for (int i = 0, numberOfCommas = 0; i < strlen(userInfo); i++)
+		{
+			// Every time you encounter a comma, increment the number of commas.
+			if (userInfo[i] == ',')
+			{
+				numberOfCommas++;
+				continue;
+			}
+
+			// Fill out the name
+			if (numberOfCommas == 0) name.push_back(userInfo[i]);
+
+			// Fill out the weight
+			if (numberOfCommas == 1) weight.push_back(userInfo[i]);
+
+			// Fill out the height
+			if (numberOfCommas == 2) height.push_back(userInfo[i]);
+
+			// Fill out the age
+			if (numberOfCommas == 3) age.push_back(userInfo[i]);
+
+			// Fill out the gender
+			if (numberOfCommas == 4) gender.push_back(userInfo[i]);
+		}
+
+		if (gender == "F") {
+			calorieCount = getFemaleCalorieCount(stoi(height), stoi(weight), stoi(age));
+		}
+		else {
+			calorieCount = getMaleCalorieCount(stoi(height), stoi(weight), stoi(age));
+		}
+		
+		cout << "\n\n===================== Summary =============================" << endl;
+		cout << "In order to maintain your current weight,\nyou will have to ingest " << calorieCount << " calories per day." << endl;
+		cout << "\nIn order to increase your weight (weight training,\nmuscle building, etc.), you will have to ingest " << calorieCount + 250 << " calories per day." << endl;
+		cout << "\nIn order to lose weight (burn fat),\nyou will have to lower your calorie intake by 150 - 250 calories per day. This means your daily caloric intake should be roughly: " << calorieCount - 150 << endl;
+
+		cout << "\n\nIf you follow this advice on a daily basis, you will be that much closer to reaching your goal!\n\n";
+		cout << "===========================================================" << endl;
 	}
-
-	// If the user chooses option 3: "Calculate calories"
-	// Then we calculate the user's calories and display them.
-	// TO DO:
-	
-	// if (userGender == 'F')
-	// {
-	// 	calorieCount = getFemaleCalorieCount(userAge, userWeight, userHeight);
-	// } else {
-	// 	calorieCount = getMaleCalorieCount(userAge, userWeight, userHeight);
-	// }
-
-	cout << "You should eat " << calorieCount << " calories each day to reach your goal." << endl;
 
 	return 0;
 }
+
 
